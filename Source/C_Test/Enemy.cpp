@@ -422,6 +422,9 @@ bool AEnemy::Alive()
 	return GetEnemyMovementStatus() != EEnemyMovementStatus::EMS_Dead;
 }
 
+
+
+
 //void AEnemy::Disappear()
 //{
 //	Destroy();

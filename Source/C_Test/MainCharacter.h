@@ -141,6 +141,8 @@ public:
 	void IncrementGold(float Amount);
 	UFUNCTION(BlueprintCallable)
 	void IncrementHealth(float HealthAmount);
+	
+	
 	/************/
 	/*
 	@param Rate = -1 a 1 dove 1 corrisponde al 100%
@@ -166,7 +168,14 @@ public:
 	void SetEquippedWeapon(AWeapon* WeaponToSet);
 	void SetMovementStatus(EMovementStatus Status);
 	void UpdateCombatTarget();
-	FRotator GetLookAtRotationYaw(FVector Target);
+	FRotator GetLookAtRotationYaw(FVector Target); 
+
+	void ChangeLevel( FName LevelName);
+
+	UFUNCTION(BlueprintCallable)
+	void SaveGame();
+	UFUNCTION(BlueprintCallable)
+	void LoadGame(bool setLocation);
 
 	
 

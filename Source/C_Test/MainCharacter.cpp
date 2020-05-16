@@ -8,12 +8,15 @@
 #include "Math/UnrealMathUtility.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/GameplayStatics.h"
 #include "Animation/AnimInstance.h"
 
 #include "Weapon.h"
 #include "Item.h"
 #include "Enemy.h"
 #include "MainController.h"
+#include "MySaveGame.h"
+
 
 
 // Sets default values
@@ -288,6 +291,105 @@ FRotator AMainCharacter::GetLookAtRotationYaw(FVector Target)
 	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Target);
 	FRotator LookAtRotationYaw(0.f, LookAtRotation.Yaw, 0.f);
 	return LookAtRotationYaw;
+}
+
+void AMainCharacter::ChangeLevel(FName LevelName)
+{
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		FString CurrentLevelName = World->GetMapName(); //get nome livello
+
+		if ((*CurrentLevelName) != LevelName) //vado a leggere il contenuto dell'indirizzo 
+		{
+			UGameplayStatics::OpenLevel(World, LevelName);
+		}
+
+	}
+
+
+
+}
+
+
+
+
+void AMainCharacter::SaveGame()
+{
+	UMySaveGame* SaveGameInstance = Cast<UMySaveGame>(UGameplayStatics::CreateSaveGameObject(UMySaveGame::StaticClass()));
+
+	SaveGameInstance->CharacterStats.Health = Health;
+	SaveGameInstance->CharacterStats.MaxHealth = MaxHealth;
+	SaveGameInstance->CharacterStats.Stamina = Stamina;
+	SaveGameInstance->CharacterStats.MaxStamina = MaxStamina;
+	SaveGameInstance->CharacterStats.GoldCounter = GoldCounter;
+
+	FString MapName = GetWorld()->GetMapName();
+	MapName.RemoveFromStart(GetWorld()->StreamingLevelsPrefix);
+
+	SaveGameInstance->CharacterStats.LevelName = MapName;
+
+	/*if (EquippedWeapon)
+	{
+		SaveGameInstance->CharacterStats.WeaponName = EquippedWeapon->Name;
+	}*/
+
+	SaveGameInstance->CharacterStats.Location = GetActorLocation();
+	SaveGameInstance->CharacterStats.Rotation = GetActorRotation();
+
+	UGameplayStatics::SaveGameToSlot(SaveGameInstance, SaveGameInstance->SlotName, SaveGameInstance->SlotIndex);
+
+
+
+
+
+}
+void AMainCharacter::LoadGame(bool setPosition)
+{
+	UMySaveGame* LoadGameInstance = Cast<UMySaveGame>(UGameplayStatics::CreateSaveGameObject(UMySaveGame::StaticClass()));
+
+	LoadGameInstance = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SlotName, LoadGameInstance->SlotIndex));
+	
+	
+	
+	
+	Health = LoadGameInstance->CharacterStats.Health;
+	MaxHealth = LoadGameInstance->CharacterStats.MaxHealth;
+	Stamina = LoadGameInstance->CharacterStats.Stamina;
+	MaxStamina = LoadGameInstance->CharacterStats.MaxStamina;
+	GoldCounter = LoadGameInstance->CharacterStats.GoldCounter;
+
+	/*if (WeaponStorage)
+	{
+		AItemStorage* Weapons = GetWorld()->SpawnActor<AItemStorage>(WeaponStorage);
+		if (Weapons)
+		{
+			FString WeaponName = LoadGameInstance->CharacterStats.WeaponName;
+
+			AWeapon* WeaponToEquip = GetWorld()->SpawnActor<AWeapon>(Weapons->WeaponMap[WeaponName]);
+			WeaponToEquip->Equip(this);
+
+		}
+	}*/
+
+	//if (setPosition)
+	//{
+		SetActorLocation(LoadGameInstance->CharacterStats.Location);
+		SetActorRotation(LoadGameInstance->CharacterStats.Rotation);
+	/*}*/
+
+	//SetMovementStatus(EMovementStatus::EMS_Normal);
+	//GetMesh()->bPauseAnims = false;
+	//GetMesh()->bNoSkeletonUpdate = false;
+
+	//if (LoadGameInstance->CharacterStats.LevelName != TEXT(""))
+	//{
+	//	FName LevelName(*LoadGameInstance->CharacterStats.LevelName);
+
+	//	SwitchLevel(LevelName);
+	//}
+
+
 }
 
 
