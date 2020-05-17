@@ -11,6 +11,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Animation/AnimInstance.h"
 
+#include "ItemManager.h"
 #include "Weapon.h"
 #include "Item.h"
 #include "Enemy.h"
@@ -329,10 +330,10 @@ void AMainCharacter::SaveGame()
 
 	SaveGameInstance->CharacterStats.LevelName = MapName;
 
-	/*if (EquippedWeapon)
+	if (EquippedWeapon) //salva la weapon solo se è equipaggiata
 	{
 		SaveGameInstance->CharacterStats.WeaponName = EquippedWeapon->Name;
-	}*/
+	}
 
 	SaveGameInstance->CharacterStats.Location = GetActorLocation();
 	SaveGameInstance->CharacterStats.Rotation = GetActorRotation();
@@ -359,18 +360,21 @@ void AMainCharacter::LoadGame(bool setPosition)
 	MaxStamina = LoadGameInstance->CharacterStats.MaxStamina;
 	GoldCounter = LoadGameInstance->CharacterStats.GoldCounter;
 
-	/*if (WeaponStorage)
+	
+	if (ItemManager) //se presente l'itemManager (inventario)
 	{
-		AItemStorage* Weapons = GetWorld()->SpawnActor<AItemStorage>(WeaponStorage);
-		if (Weapons)
+		AItemManager* Weapons = GetWorld()->SpawnActor<AItemManager>(ItemManager); //casto la classe
+		if (Weapons) // se il cast ha avuto buon fine recupero l'oggetto che mi interessa dalla mappa
 		{
 			FString WeaponName = LoadGameInstance->CharacterStats.WeaponName;
-
-			AWeapon* WeaponToEquip = GetWorld()->SpawnActor<AWeapon>(Weapons->WeaponMap[WeaponName]);
+			//TODO se la string è empty va in crash nullptr!!!
+			AWeapon* WeaponToEquip = GetWorld()->SpawnActor<AWeapon>(Weapons->WeaponList[WeaponName]);
 			WeaponToEquip->Equip(this);
 
 		}
-	}*/
+	}
+
+	//TODO la position e la rotation vengono settate solo se non si cambia livello
 
 	//if (setPosition)
 	//{

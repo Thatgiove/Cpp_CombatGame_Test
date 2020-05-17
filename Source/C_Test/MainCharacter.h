@@ -113,6 +113,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Subclass") // con questo ci assicuriamo che gli oggetti che entrano in collisione col player siano di tipo enemy
 	TSubclassOf<AEnemy> EnemyFilter;
 
+
+	UPROPERTY(EditDefaultsOnly, Category = "Subclass")
+	TSubclassOf<class AItemManager> ItemManager; // Riferimento alla classe inventario 
+
 protected:
 	virtual void BeginPlay() override;
 

@@ -42,6 +42,8 @@ public :
 	
 	
 	/***PROPRIETA ARMA*****/
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon | Property")
+	FString Name;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon | Property")
 	float Damage;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon | Property") //proprietà per ApplyDamage -- serve a definire il tipo di danno -- da settare in blueprint

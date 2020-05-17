@@ -26,6 +26,8 @@ struct FCharacterElementsToSave
 	FRotator Rotation;
 	UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
 	FString LevelName;
+	UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
+	FString WeaponName;
 };
 
 
