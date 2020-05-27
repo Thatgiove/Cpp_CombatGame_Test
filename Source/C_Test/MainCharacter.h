@@ -98,6 +98,9 @@ public:
 
 	bool bIsShiftKeyPressed;
 	bool bIsLeftClickMousePressed;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Main | Anims")
+	bool bIsCtrlKeyPressed;
 	
 	float InterpSpeed;
 	/*PLAYER EQUIP*/
@@ -157,6 +160,11 @@ public:
 	void ShiftKeyUp();
 	void LeftClickMouseDown();
 	void LeftClickMouseUp();
+	void QButtonDown();
+	void QButtonUp();
+	void CtrlKeyUp();
+	void CtrlKeyDown();
+
 
 	//getter setter
 	FORCEINLINE class USpringArmComponent* GetSpringArmComponent() const { return CameraBoom; }

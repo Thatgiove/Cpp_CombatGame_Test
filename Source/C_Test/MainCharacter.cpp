@@ -92,6 +92,7 @@ AMainCharacter::AMainCharacter()
 	InterpSpeed = 15.f;
 	bInterpToEnemy = false;
 	bHasCombatTarget = false;
+	bIsCtrlKeyPressed = false;
 }
 
 // Called when the game starts or when spawned
@@ -416,10 +417,21 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Pressed, this, &AMainCharacter::ShiftKeyDown); //alla pressione del tasto
 	PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Released, this, &AMainCharacter::ShiftKeyUp); //al rilascio del tasto
 
+	//roll
+	PlayerInputComponent->BindAction(TEXT("Roll"), IE_Pressed, this, &AMainCharacter::CtrlKeyDown); //alla pressione del tasto
+	PlayerInputComponent->BindAction(TEXT("Roll"), IE_Released, this, &AMainCharacter::CtrlKeyUp); //al rilascio del tasto
+
+	//click menu pausa
+	PlayerInputComponent->BindAction(TEXT("Pause"), IE_Pressed, this, &AMainCharacter::QButtonDown); //alla pressione del tasto
+	PlayerInputComponent->BindAction(TEXT("Pause"), IE_Released, this, &AMainCharacter::QButtonUp); //al rilascio del tasto
+
 	//click tastosx
 	PlayerInputComponent->BindAction(TEXT("LeftMouseButton"), IE_Pressed, this, &AMainCharacter::LeftClickMouseDown); //alla pressione del tasto
 	PlayerInputComponent->BindAction(TEXT("LeftMouseButton"), IE_Released, this, &AMainCharacter::LeftClickMouseUp); //al rilascio del tasto
 
+
+
+	//move
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &AMainCharacter::MoveForward);
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &AMainCharacter::MoveRight);
 
@@ -509,7 +521,6 @@ void AMainCharacter::IncrementGold(float Amount)
 {
 	GoldCounter += Amount;
 }
-
 void AMainCharacter::IncrementHealth(float HealthAmount)
 {
 	if (Health + HealthAmount >= MaxHealth)
@@ -521,7 +532,6 @@ void AMainCharacter::IncrementHealth(float HealthAmount)
 		Health += HealthAmount;
 	}
 }
-
 
 
 void AMainCharacter::Die()
@@ -639,6 +649,14 @@ void AMainCharacter::SetMovementStatus(EMovementStatus Status)
 
 void AMainCharacter::ShiftKeyDown() { bIsShiftKeyPressed = true; }
 void AMainCharacter::ShiftKeyUp() { bIsShiftKeyPressed = false; }
+void AMainCharacter::QButtonDown() { if(MainPlayerController) MainPlayerController->TogglePauseMenu();}
+void AMainCharacter::QButtonUp() { /*if (MainPlayerController) MainPlayerController->TogglePauseMenu(false);*/ }
+
+
+void AMainCharacter::CtrlKeyDown(){ bIsCtrlKeyPressed = true; }
+void AMainCharacter::CtrlKeyUp(){ bIsCtrlKeyPressed = false; }
+
+
 
 void AMainCharacter::LeftClickMouseDown() 
 { 

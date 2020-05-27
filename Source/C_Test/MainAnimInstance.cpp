@@ -37,17 +37,23 @@ void UMainAnimInstance::UpdateAnimationProperty()
 		FVector Speed = CharacterPawn->GetVelocity(); 
 		FVector LateralSpeed = FVector(Speed.X , Speed.Y , 0.f);
 
-		MovementSpeed = LateralSpeed.Size();//Size() ottiene la magnitudine del vettore
+		MovementSpeed = LateralSpeed.Size(); //Size() ottiene la magnitudine del vettore
 		
 		bIsInAir = CharacterPawn->GetMovementComponent()->IsFalling();
 
+		//bCanRoll = CharacterPawn->GetMovementComponent()->IsCrouching() ;
 		
-		//AMainCharacter* main = Cast<AMainCharacter>(CharacterPawn);
-		bIsJumpKeyPressed = MainCharacter->bPressedJump;
+		
+		
+		AMainCharacter* main = Cast<AMainCharacter>(CharacterPawn);
+		//bIsJumpKeyPressed = MainCharacter->bPressedJump;
 
 		if (MainCharacter == nullptr)
 		{
 			MainCharacter = Cast<AMainCharacter>(CharacterPawn);
+
+			bCanRoll = MainCharacter->bMovingForward && MainCharacter->bIsCtrlKeyPressed;
+
 		}
 	}
 }

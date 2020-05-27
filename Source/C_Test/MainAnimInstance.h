@@ -21,7 +21,10 @@ public:
 		float MovementSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
-		bool bIsInAir;
+		bool bIsInAir;	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
+		bool bCanRoll;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Movement)
 		bool bIsJumpKeyPressed;

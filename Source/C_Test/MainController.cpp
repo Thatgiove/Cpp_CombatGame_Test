@@ -11,7 +11,10 @@ void AMainController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//se è presente un elementop vidget selezionato nel menu a tendina
+
+	bPauseDisplayVisible = false;
+
+	//se è presente un elementop Widget selezionato nel menu a tendina
 	if (UserOverlayAsset)
 	{
 		HUD_Overlay = CreateWidget<UUserWidget>(this, UserOverlayAsset);
@@ -34,7 +37,17 @@ void AMainController::BeginPlay()
 	}
 
 
+	if (WPauseMenu)
+	{
+		PauseMenu = CreateWidget<UUserWidget>(this, WPauseMenu);
 
+		if (PauseMenu)
+		{
+			PauseMenu->AddToViewport();
+			PauseMenu->SetVisibility(ESlateVisibility::Hidden);
+
+		}	
+	}
 
 
 }
@@ -85,4 +98,43 @@ void AMainController::RemoveEnemyHealthBar()
 		EnemyHealthBar->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
+
+void AMainController::DisplayPauseMenu_Implementation()
+{
+	if (PauseMenu)
+	{
+		bPauseDisplayVisible = true;
+		PauseMenu->SetVisibility(ESlateVisibility::Visible);
+
+		FInputModeGameAndUI InputModeGameAndUI;
+
+		SetInputMode(InputModeGameAndUI);
+		bShowMouseCursor = true;
+	}
+}
+
+void AMainController::RemovePauseMenu_Implementation()
+{
+	if (PauseMenu)
+	{
+		//GameModeOnly();
+
+		bShowMouseCursor = false;
+
+		bPauseDisplayVisible = false;
+	}
+}
+
+
+void AMainController::TogglePauseMenu()
+{
+	bPauseDisplayVisible = !bPauseDisplayVisible;
+	
+	if (bPauseDisplayVisible)
+	{
+		PauseMenu->SetVisibility(ESlateVisibility::Visible);
+	}else
+		PauseMenu->SetVisibility(ESlateVisibility::Hidden);
+}
+
 
