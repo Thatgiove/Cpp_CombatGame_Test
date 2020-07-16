@@ -93,6 +93,8 @@ AMainCharacter::AMainCharacter()
 	bInterpToEnemy = false;
 	bHasCombatTarget = false;
 	bIsCtrlKeyPressed = false;
+
+	bisRolling = false;
 }
 
 // Called when the game starts or when spawned
@@ -601,6 +603,33 @@ void AMainCharacter::Jump()
 		Super::Jump();
 
 }
+void AMainCharacter::Roll()
+{
+	//se non sta in rolling altrimenti lo fa sempre
+	if (!bisRolling && bMovingForward)
+	{
+		bisRolling = true;
+		
+		//aggiunge impulso
+		//FVector newVec = 
+		this->GetCharacterMovement()->AddImpulse(this->GetActorForwardVector() * 500000);
+
+
+		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+		if (AnimInstance && CombatMontage)
+		{
+
+			AnimInstance->Montage_Play(CombatMontage, 1.3f);
+			AnimInstance->Montage_JumpToSection(FName("Roll"), CombatMontage);
+
+		}
+
+
+
+	}
+
+
+}
 void AMainCharacter::AttackEnd()
 {
 		bIsAttacking = false ;
@@ -653,8 +682,8 @@ void AMainCharacter::QButtonDown() { if(MainPlayerController) MainPlayerControll
 void AMainCharacter::QButtonUp() { /*if (MainPlayerController) MainPlayerController->TogglePauseMenu(false);*/ }
 
 
-void AMainCharacter::CtrlKeyDown(){ bIsCtrlKeyPressed = true; }
-void AMainCharacter::CtrlKeyUp(){ bIsCtrlKeyPressed = false; }
+void AMainCharacter::CtrlKeyDown() { bIsCtrlKeyPressed = true; Roll(); }
+void AMainCharacter::CtrlKeyUp() {bIsCtrlKeyPressed = false; bisRolling = false;}
 
 
 

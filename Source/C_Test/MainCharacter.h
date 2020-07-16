@@ -97,6 +97,7 @@ public:
 	
 
 	bool bIsShiftKeyPressed;
+	bool bisRolling;
 	bool bIsLeftClickMousePressed;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Main | Anims")
@@ -138,7 +139,7 @@ public:
 	void Attack();
 	bool IsDead();
 	virtual void Jump() override;
-
+	void Roll();
 
 	UFUNCTION(BlueprintCallable) //funzioni che chiamerò dopo l'anim notify delle animation blueprint
 	void AttackEnd();	
